@@ -24,7 +24,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeMode = context.read<ThemeBloc>().currentThemeMode;
+    ThemeData currentTheme = context.read<ThemeBloc>().currentThemeMode;
 
     return Scaffold(
       body: BlocBuilder<UserBloc, UserState>(builder: (context, state) {
@@ -139,10 +139,10 @@ class _ProfileState extends State<Profile> {
                   RadioListTile<ThemeData>(
                     title: const Text('Light Theme'),
                     value: ThemeData.light(),
-                    groupValue: themeMode,
+                    groupValue: currentTheme,
                     onChanged: (ThemeData? value) {
                       setState(() {
-                        themeMode = value!;
+                        currentTheme = value!;
                       });
                       context.read<ThemeBloc>().add(SelectedLightTheme());
                     },
@@ -151,10 +151,10 @@ class _ProfileState extends State<Profile> {
                   RadioListTile<ThemeData>(
                     title: const Text('Dark Theme'),
                     value: ThemeData.dark(),
-                    groupValue: themeMode,
+                    groupValue: currentTheme,
                     onChanged: (ThemeData? value) {
                       setState(() {
-                        themeMode = value!;
+                        currentTheme = value!;
                       });
                       context.read<ThemeBloc>().add(SelectedDarkTheme());
                     },
@@ -188,7 +188,9 @@ class _ProfileState extends State<Profile> {
         }
         return Center(
           child: SpinKitDoubleBounce(
-            color: Theme.of(context).primaryColor,
+            color: currentTheme == ThemeData.light()
+                ? Theme.of(context).primaryColor
+                : Colors.white,
           ),
         );
       }),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../core/theme/bloc/theme_block.dart';
 import '../bloc/quote_detail_bloc.dart';
 
 class QuoteDetails extends StatefulWidget {
@@ -23,6 +24,7 @@ class _QuoteDetailsState extends State<QuoteDetails> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = context.watch<ThemeBloc>().currentThemeMode;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
@@ -188,7 +190,9 @@ class _QuoteDetailsState extends State<QuoteDetails> {
             }
             return Center(
               child: SpinKitDoubleBounce(
-                color: Theme.of(context).primaryColor,
+                color: currentTheme == ThemeData.light()
+                    ? Theme.of(context).primaryColor
+                    : Colors.white,
               ),
             );
           },
