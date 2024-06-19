@@ -8,6 +8,18 @@ class QuotesResponseModel {
     required this.lastPage,
     required this.quotes,
   });
+
+  QuotesResponseModel copyWith({
+    int? page,
+    bool? lastPage,
+    List<QuoteModel>? quotes,
+  }) {
+    return QuotesResponseModel(
+      page: page ?? this.page,
+      lastPage: lastPage ?? this.lastPage,
+      quotes: quotes ?? this.quotes,
+    );
+  }
 }
 
 class QuoteModel {

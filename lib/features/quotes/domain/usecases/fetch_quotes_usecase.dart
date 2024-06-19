@@ -15,6 +15,17 @@ class FetchQuotesUsecase
   Future<Resource<QuotesResponseModel>> call(
       {required QuoteCategory params}) async {
     final quotes = await _quotesRepository.getQuotes(params);
+
+    if (quotes is Success) {
+      final filteredQuotes = quotes.data!.quotes.where((quote) {
+        return quote.body != null &&
+            quote.body!.isNotEmpty &&
+            quote.body!.length > 4;
+      }).toList();
+      final filteredRes = quotes.data!.copyWith(quotes: filteredQuotes);
+      return Success(filteredRes);
+    }
+
     return quotes;
   }
 }

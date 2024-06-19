@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wonder_words/features/auth/presentation/pages/forgot_password.dart';
 import 'package:wonder_words/features/auth/presentation/pages/login.dart';
 import 'package:wonder_words/features/auth/presentation/pages/sign_up.dart';
-import 'package:wonder_words/features/quotes/presentation/pages/home.dart';
+import 'package:wonder_words/home.dart';
 
 import '../../features/details/presentation/pages/quote_details.dart';
 

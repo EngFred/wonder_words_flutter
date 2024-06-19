@@ -31,12 +31,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        bottomNavigationBar: _buildBottomNavigationBar(navbarItems),
-        body: IndexedStack(
-          index: destIndex,
-          children: pages,
-        ));
+    return SafeArea(
+      child: Scaffold(
+          bottomNavigationBar: _buildBottomNavigationBar(navbarItems),
+          body: IndexedStack(
+            index: destIndex,
+            children: pages,
+          )),
+    );
   }
 
   Widget _buildBottomNavigationBar(List<NavigationDestination> destinations) {

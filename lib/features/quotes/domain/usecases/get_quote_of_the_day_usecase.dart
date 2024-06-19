@@ -11,6 +11,9 @@ class GetQuoteOfTheDayUsecase extends BaseUsecase<QuoteOfTheDayModel?, Null> {
   @override
   Future<QuoteOfTheDayModel?> call({required params}) async {
     final qotdRes = await _quotesRepository.getQuoteOfTheDay();
-    return qotdRes;
+    if (qotdRes!.quote.body != null && qotdRes.quote.body!.isNotEmpty) {
+      return qotdRes;
+    }
+    return null;
   }
 }

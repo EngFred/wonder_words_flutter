@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:logger/logger.dart';
 import 'package:wonder_words/features/quotes/domain/entities/quote_of_the_day_model.dart';
 import 'package:wonder_words/features/quotes/domain/entities/quotes_response_model.dart';
 import 'package:wonder_words/features/quotes/domain/usecases/get_quote_of_the_day_usecase.dart';
@@ -43,69 +42,75 @@ class _QuotesState extends State<Quotes> {
         .add(FetchQuotes(category: QuoteCategory.all));
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Logger().d("Did change dependencies has been called!");
-    //_getQuoteOfTheDay();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   Logger().d("Did change dependencies has been called!");
+  //   //_getQuoteOfTheDay();
+  // }
 
   @override
   Widget build(BuildContext context) {
     ThemeData currentTheme = context.watch<ThemeBloc>().currentThemeMode;
-    return SafeArea(
-      child: Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Column(
-          children: [
-            _buildSearchTexField(),
-            const SizedBox(
-              height: 10,
-            ),
-            _buildCategoriesList(currentTheme),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: BlocBuilder<QuotesBloc, QuotesState>(
-                  builder: (contex, state) {
-                if (state is QuotesError) {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) async {
+        SystemNavigator.pop();
+      },
+      child: SafeArea(
+        child: Scaffold(
+            body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Column(
+            children: [
+              _buildSearchTexField(),
+              const SizedBox(
+                height: 10,
+              ),
+              _buildCategoriesList(currentTheme),
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: BlocBuilder<QuotesBloc, QuotesState>(
+                    builder: (context, state) {
+                  if (state is QuotesError) {
+                    return Center(
+                      child: Text(
+                        state.errMsg,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  } else if (state is QuotesSuccess) {
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Two columns
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0,
+                        // childAspectRatio:
+                        //     0.5, // Adjust the aspect ratio as needed
+                      ),
+                      itemCount: state.quotesResponseModel.quotes.length,
+                      itemBuilder: (context, index) {
+                        final quote = state.quotesResponseModel.quotes[index];
+                        return _buildGridItem(quote);
+                      },
+                    );
+                  }
                   return Center(
-                    child: Text(
-                      state.errMsg,
-                      textAlign: TextAlign.center,
+                    child: SpinKitDoubleBounce(
+                      color: currentTheme == ThemeData.light()
+                          ? Theme.of(context).primaryColor
+                          : Colors.white,
                     ),
                   );
-                } else if (state is QuotesSuccess) {
-                  return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Two columns
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      // childAspectRatio:
-                      //     0.5, // Adjust the aspect ratio as needed
-                    ),
-                    itemCount: state.quotesResponseModel.quotes.length,
-                    itemBuilder: (context, index) {
-                      final quote = state.quotesResponseModel.quotes[index];
-                      return _buildGridItem(quote);
-                    },
-                  );
-                }
-                return Center(
-                  child: SpinKitDoubleBounce(
-                    color: currentTheme == ThemeData.light()
-                        ? Theme.of(context).primaryColor
-                        : Colors.white,
-                  ),
-                );
-              }),
-            )
-          ],
-        ),
-      )),
+                }),
+              )
+            ],
+          ),
+        )),
+      ),
     );
   }
 

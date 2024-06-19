@@ -61,71 +61,76 @@ Future<String?> initializeDeps() async {
   sl.registerLazySingleton(
       () => CreateUserSessionUsecase(authRepository: sl()));
 
-  sl.registerLazySingleton<AuthBloc>(
-      () => AuthBloc(createUserUsecase: sl(), createUserSessionUsecase: sl()));
+  sl.registerLazySingleton<AuthBloc>(() => AuthBloc(
+      createUserUsecase: sl(),
+      createUserSessionUsecase: sl(),
+      sharedPreferencesHelper: sl()));
 
   //quotes
   if (userToken != null) {
-    sl.registerLazySingleton<Dio>(() => setupDioForQuotes(userToken),
-        instanceName: 'quotesDio');
-
-    sl.registerLazySingleton<QuotesApiService>(
-        () => QuotesApiService(sl(instanceName: 'quotesDio')));
-
-    sl.registerLazySingleton<QuotesRepository>(
-        () => QuotesRepositoryImpl(quotesApiService: sl()));
-
-    sl.registerLazySingleton(() => FetchQuotesUsecase(quotesRepository: sl()));
-
-    sl.registerLazySingleton(
-        () => GetQuoteOfTheDayUsecase(quotesRepository: sl()));
-
-    sl.registerLazySingleton<QuotesBloc>(() => QuotesBloc(sl()));
-
-    //quote_details
-    sl.registerLazySingleton<Dio>(() => setupDioForQuoteDetails(userToken),
-        instanceName: 'quoteDetailsDio');
-
-    sl.registerLazySingleton<QuoteDetailApiService>(
-        () => QuoteDetailApiService(sl(instanceName: 'quoteDetailsDio')));
-
-    sl.registerLazySingleton<QuoteDetailRepository>(
-        () => QuoteDetailReposiotryImpl(quoteDetailApiService: sl()));
-
-    sl.registerLazySingleton(
-        () => GetQuoteDetailsUsecase(quoteDetailsRepository: sl()));
-
-    sl.registerLazySingleton(
-        () => FavQuoteUsecase(quoteDetailRepository: sl()));
-
-    sl.registerLazySingleton(
-        () => UnFavQuoteUsecase(quoteDetailRepository: sl()));
-
-    sl.registerLazySingleton(
-        () => UpvoteQuoteUsecase(quoteDetailRepository: sl()));
-
-    sl.registerLazySingleton(
-        () => DownvoteQuoteUsecase(quoteDetailRepository: sl()));
-
-    sl.registerLazySingleton<QuoteDetailBloc>(
-        () => QuoteDetailBloc(sl(), sl(), sl(), sl(), sl()));
-
-    //user
-
-    sl.registerLazySingleton<Dio>(() => setupDioForUserInfo(userToken),
-        instanceName: 'userInfoDio');
-
-    sl.registerLazySingleton<UserDetailService>(
-        () => UserDetailService(sl(instanceName: 'userInfoDio')));
-
-    sl.registerLazySingleton<UserDetailRepository>(
-        () => UserDetailRepositoryImpl(userDetailService: sl()));
-
-    sl.registerLazySingleton(
-        () => GetUserDetailUsecase(userDetailRepository: sl()));
-
-    sl.registerLazySingleton<UserBloc>(() => UserBloc(sl(), userName));
+    initDepsWithUserToken(userToken, userName!);
   }
 
   return userToken;
+}
+
+void initDepsWithUserToken(String userToken, String userName) {
+  sl.registerLazySingleton<Dio>(() => setupDioForQuotes(userToken),
+      instanceName: 'quotesDio');
+
+  sl.registerLazySingleton<QuotesApiService>(
+      () => QuotesApiService(sl(instanceName: 'quotesDio')));
+
+  sl.registerLazySingleton<QuotesRepository>(
+      () => QuotesRepositoryImpl(quotesApiService: sl()));
+
+  sl.registerLazySingleton(() => FetchQuotesUsecase(quotesRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetQuoteOfTheDayUsecase(quotesRepository: sl()));
+
+  sl.registerLazySingleton<QuotesBloc>(() => QuotesBloc(sl()));
+
+  //quote_details
+  sl.registerLazySingleton<Dio>(() => setupDioForQuoteDetails(userToken),
+      instanceName: 'quoteDetailsDio');
+
+  sl.registerLazySingleton<QuoteDetailApiService>(
+      () => QuoteDetailApiService(sl(instanceName: 'quoteDetailsDio')));
+
+  sl.registerLazySingleton<QuoteDetailRepository>(
+      () => QuoteDetailReposiotryImpl(quoteDetailApiService: sl()));
+
+  sl.registerLazySingleton(
+      () => GetQuoteDetailsUsecase(quoteDetailsRepository: sl()));
+
+  sl.registerLazySingleton(() => FavQuoteUsecase(quoteDetailRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => UnFavQuoteUsecase(quoteDetailRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => UpvoteQuoteUsecase(quoteDetailRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => DownvoteQuoteUsecase(quoteDetailRepository: sl()));
+
+  sl.registerLazySingleton<QuoteDetailBloc>(
+      () => QuoteDetailBloc(sl(), sl(), sl(), sl(), sl()));
+
+  //user
+
+  sl.registerLazySingleton<Dio>(() => setupDioForUserInfo(userToken),
+      instanceName: 'userInfoDio');
+
+  sl.registerLazySingleton<UserDetailService>(
+      () => UserDetailService(sl(instanceName: 'userInfoDio')));
+
+  sl.registerLazySingleton<UserDetailRepository>(
+      () => UserDetailRepositoryImpl(userDetailService: sl()));
+
+  sl.registerLazySingleton(
+      () => GetUserDetailUsecase(userDetailRepository: sl()));
+
+  sl.registerLazySingleton<UserBloc>(() => UserBloc(sl(), userName));
 }

@@ -47,9 +47,19 @@ dev_dependencies:
   retrofit_generator: ^8.1.0
   build_runner: ^2.4.11
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/splash.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/images/logo_flutter.png
+    - assets/images/splash.png
 
   fonts:
     - family: font1

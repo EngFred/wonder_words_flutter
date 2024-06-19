@@ -6,12 +6,17 @@ import 'package:wonder_words/features/auth/domain/usecases/create_user_session_u
 import 'package:wonder_words/features/auth/domain/usecases/create_user_usecase.dart';
 import 'package:wonder_words/features/auth/presentation/bloc/auth_events.dart';
 import 'package:wonder_words/features/auth/presentation/bloc/auth_state.dart';
+import 'package:wonder_words/features/auth/utils/shared_preferences_helper.dart';
+import 'package:wonder_words/injection_container.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthState> {
   final CreateUserUsecase createUserUsecase;
   final CreateUserSessionUsecase createUserSessionUsecase;
+  final SharedPreferencesHelper sharedPreferencesHelper;
   AuthBloc(
-      {required this.createUserSessionUsecase, required this.createUserUsecase})
+      {required this.createUserSessionUsecase,
+      required this.createUserUsecase,
+      required this.sharedPreferencesHelper})
       : super(AuthInitial()) {
     on<LoginButtonClicked>(_onLoginButtonClicked);
     on<SignupButtonClicked>(_onSignupButtonClicked);
@@ -30,6 +35,9 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       final apiResponse =
           await createUserSessionUsecase(params: userSessionRequest);
       if (apiResponse is Success) {
+        final userToken = await sharedPreferencesHelper.getUserToken();
+        final userName = await sharedPreferencesHelper.getUserName();
+        initDepsWithUserToken(userToken!, userName!);
         emit(AuthSuccess());
       } else {
         emit(AuthError(errorMessage: apiResponse.error!));
@@ -48,6 +56,9 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       final userRequest = NewUserRequest(user: user);
       var apiResponse = await createUserUsecase(params: userRequest);
       if (apiResponse is Success) {
+        final userToken = await sharedPreferencesHelper.getUserToken();
+        final userName = await sharedPreferencesHelper.getUserName();
+        initDepsWithUserToken(userToken!, userName!);
         emit(AuthSuccess());
       } else {
         emit(AuthError(errorMessage: apiResponse.error!));
