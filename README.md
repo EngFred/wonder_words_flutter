@@ -3,7 +3,8 @@
 Wonder Words is a Flutter application that uses the Quotes API to bring inspiring and motivational quotes to your fingertips. This app allows users to authenticate, fetch quotes by category, search quotes, manage user profiles, and much more. The app is built using clean architecture principles to ensure a scalable and testable codebase.
 
 ##Screenshots
-![WhatsApp-Image-2024-06-19-at-14 09 49-_1_-imageonline co-merged](https://github.com/EngFred/Movie-Mania-Browser/assets/136785545/7f1286ef-c6b7-4c0d-82fe-d7b4fa78735b)
+
+![111-imageonline co-merged](https://github.com/EngFred/Movie-Mania-Browser/assets/136785545/5eb5d3f6-a947-4bd8-86e8-2843ab0e7835)
 
 ## Features
 
