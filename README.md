@@ -98,7 +98,7 @@ To run this project locally, follow these steps:
     ```
 
 
-4. **Configure TMDB API Key:**
+4. **Configure Quotes API Key:**
     - Obtain an API key from [QuotesApi](https://favqs.com/api/).
     - Add the API key to your project (e.g., in a `.env` file or directly in the code).
 
@@ -116,7 +116,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For any questions or feedback, please reach out to:
 
-- Engineer Fred - [Your Email](mailto:engfred88@gmail.com)
+- Engineer Fred - [engfred88@gmail.com](mailto:engfred88@gmail.com)
 - Project Link: [https://github.com/engFred/wonder-words-flutter](https://github.com/engFred/wonder-words-flutter)
 
 ## Acknowledgements
